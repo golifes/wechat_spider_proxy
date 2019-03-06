@@ -13,12 +13,12 @@ import (
 
 
 func main()  {
-	var port = "9955"
+	var port = app.Configuration.Spider.ProxyPort
 	print(port)
 	spider.InitConfig(&spider.Config{
-		Debug:true,
-		AutoScrool:false,
-		Compress:true,
+		Debug:app.Configuration.Spider.Debug,
+		AutoScrool:app.Configuration.Spider.AutoScrool,
+		Compress:app.Configuration.Spider.Compress,
 	})
 	spider.Regist(&CustomProcessor{})
 	spider.Run(port)
@@ -61,10 +61,11 @@ func (c *CustomProcessor) Output() {
 
 var (
 	db *mgo.Database
+	app *App
 )
 
 func init()  {
-	app := App{}
+	app = &App{}
 	app.Configuration = &spider.Configuration{}
 	app.Configuration.LoadFromFile()
 	tmp := []string{app.Configuration.Mongo.Host, app.Configuration.Mongo.Port}

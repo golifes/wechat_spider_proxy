@@ -2,7 +2,7 @@ package wegospider
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -12,8 +12,17 @@ type MongoConfiguration struct {
 	Port string
 }
 
+type SpiderConfiguration struct {
+	Debug bool
+	AutoScrool bool
+	Compress bool
+	SleepSecond int
+	ProxyPort string
+}
+
 type Configuration struct {
 	Mongo MongoConfiguration
+	Spider SpiderConfiguration
 }
 
 
@@ -23,7 +32,7 @@ func (c *Configuration) LoadFromFile() error {
 	file, _ := os.Open(fileName)
 	decoder := json.NewDecoder(file)
 	err := decoder.Decode(&c)
-	log.Println(c)
+	fmt.Printf("%+v\n", *c)
 	if err != nil {
 		return err
 	}
